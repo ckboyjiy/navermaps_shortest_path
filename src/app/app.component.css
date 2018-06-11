@@ -1,0 +1,24 @@
+:host {
+  display: block;
+  height: 100%;
+}
+.side-nav {
+  height: 100%;
+  width: 0px;
+  position: fixed;
+  z-index: 1;
+  top: 0px;
+  left: 0px;
+  background: #FFF;
+  overflow-x: hidden;
+  transition: 0.5s;
+  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
+}
+.main {
+  transition: 0.5s;
+  height: 100%;
+  display: flex;
+  align-content: stretch;
+  justify-content: stretch;
+  flex-direction: column;
+}

@@ -1,0 +1,32 @@
+:host {
+  padding-left: 5px;
+  width: 245px;
+  overflow-w: hidden;
+}
+
+.header {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.pinned-list {
+  color: rgba(0, 0, 0, 0.7);
+  margin-bottom: 5px;
+  .pinned-place {
+    padding-left: 10px;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    .title {
+      flex: 1 1 auto;
+    }
+    .btn {
+      flex: none;
+    }
+  }
+  .pinned-place:hover {
+    background: rgba(38, 200, 0, 0.1);
+  }
+}

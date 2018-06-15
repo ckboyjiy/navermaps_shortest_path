@@ -1,0 +1,8 @@
+<div class="header">Pinned Place</div>
+<div class="pinned-list">
+  <div *ngFor="let place of pinnedList" class="pinned-place">
+    <div class="title">{{place.title | stripTag}}</div>
+    <div class="btn" (click)="removePinnedMarker(place)"><button mat-icon-button><mat-icon>clear</mat-icon></button></div>
+  </div>
+</div>
+<button mat-button *ngIf="pinnedList.length > 0" (click)="getShortestPath()">최단 경로 추천</button>

@@ -1,0 +1,6 @@
+<div class="info-window">
+  <div class="title">{{place?.title | stripTag}}</div>
+  <div class="addr">{{place?.mapInfo.address}}</div>
+  <button mat-button (click)="addPlace()">담기</button>
+  <button mat-button (click)="removeMarker()">마커삭제</button>
+</div>

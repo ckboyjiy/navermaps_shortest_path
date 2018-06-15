@@ -1,6 +1,6 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 
-declare var naver: any;
+declare const naver: any;
 
 @Component({
   selector: 'app-root',
@@ -22,6 +22,10 @@ export class AppComponent implements OnInit {
       this.sideNav.nativeElement.style.width = '0px';
       this.main.nativeElement.style.marginLeft = '0px';
     }
-
+  }
+  onClick(event) {
+    if (this.isShow === true) {
+      this.openNav();
+    }
   }
 }

@@ -6,16 +6,18 @@ import { Injectable } from '@angular/core';
 export class TspService {
 
   constructor() { }
-  shortestPath(distanceMatrix) {
-    const START = 2;
+  shortestPath(distanceMatrix, start = 0) {
+    const START = start;
     const dp = [];
     this._makeDP(dp, distanceMatrix);
     this._setupDP(dp,  distanceMatrix);
     this._solveDP(START, dp, distanceMatrix);
     const minDistance = this._findMinDistance(START, dp, distanceMatrix);
     const minPath = this._findOptimalTour(START, dp, distanceMatrix);
-    console.log(minPath);
-    return minPath.filter((v, i, arr) => i < arr.length - 1);
+    return {
+      distance: minDistance,
+      path: minPath // minPath.filter((v, i, arr) => i < arr.length - 1)
+    };
   }
   _makeDP(dp, distanceMatrix) {
     for (let i = 0; i < distanceMatrix.length; i++) {

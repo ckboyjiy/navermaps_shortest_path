@@ -25,7 +25,7 @@ export class MapsComponent implements OnInit {
   instanceMarker;
   instancePlace;
   markers;
-  location;
+  shortestPath;
   constructor(private naverService: NavermapsService, private viewContainerRef: ViewContainerRef,
               private componentFactoryResolver: ComponentFactoryResolver,
               private tsp: TspService) {
@@ -237,13 +237,17 @@ export class MapsComponent implements OnInit {
       });
     });
   }
-  drawEdges(path) {
-    const polyline = new naver.maps.Polyline({ // 2. 간선에 대한 거리를 계산한다.
-      map: this.maps,
-      startIcon: naver.maps.PointingIcon.CIRCLE,
-      endIcon: naver.maps.PointingIcon.OPEN_ARROW,
-      strokeLineJoin: 'round ',
-      path: path.map(v => this.markers[v].getPosition())
-    });
+  drawEdges(shortest) {
+    if (!this.shortestPath) {
+      this.shortestPath = new naver.maps.Polyline({ // 2. 간선에 대한 거리를 계산한다.
+        map: this.maps,
+        startIcon: naver.maps.PointingIcon.CIRCLE,
+        endIcon: naver.maps.PointingIcon.OPEN_ARROW,
+        strokeLineJoin: 'round ',
+        path: shortest.path.map(v => this.markers[v].getPosition())
+      });
+    } else {
+      this.shortestPath.setPath(shortest.path.map(v => this.markers[v].getPosition()));
+    }
   }
 }

@@ -53,6 +53,9 @@ export class MapsComponent implements OnInit {
       // TODO. arguments[0].coord => types 업글되면 수정 필요
       this.clickMap(args[0].coord);
     });
+    naver.maps.Event.addListener(this.maps, 'zoom_changed', (...args) => {
+      this.naverService.changedZoom(args[0]);
+    })
     this.naverService.initMaps(this.maps.getZoom());
   }
   clickMap(coord) {

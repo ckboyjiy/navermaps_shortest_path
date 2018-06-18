@@ -11,6 +11,7 @@ export class NavermapsService {
   private readonly _observable: Observable<NavermapsEvent>;
   private _subject: BehaviorSubject<NavermapsEvent>;
   private _pinnedList: NaverPlace[] = [];
+  private _zoom: number;
   get observable(): Observable<NavermapsEvent> {
     return this._observable;
   }
@@ -26,10 +27,19 @@ export class NavermapsService {
       return {unsubscribe() {console.log('unsubscribe'); } };
     });
   }
-  initMaps() {
+  initMaps(zoom) {
     this._subject.next({
       type: 'map',
       event: 'created'
+    });
+    this.changedZoom(zoom);
+  }
+  changedZoom(zoom) {
+    this._zoom = zoom;
+    this._subject.next({
+      type: 'map',
+      event: 'zoom',
+      data: this._zoom
     });
   }
   drawMarker(place: NaverPlace) {

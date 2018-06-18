@@ -5,4 +5,6 @@
     <div class="btn" (click)="removePinnedMarker(place)"><button mat-icon-button><mat-icon>clear</mat-icon></button></div>
   </div>
 </div>
-<button mat-button *ngIf="pinnedList.length > 0" (click)="getShortestPath()">최단 경로 추천</button>
+<div class="btn-list" *ngIf="pinnedList.length > 1">
+  <button mat-button (click)="getShortestPath()">최단 경로 추천</button>
+</div>

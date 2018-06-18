@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {GeocoderService} from '../service/geocoder.service';
@@ -10,7 +10,7 @@ import {NavermapsService, NaverPlace} from '../service/navermaps.service';
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit {
-
+  @Input() left: number;
   @Output() openNav = new EventEmitter();
   searchForm: FormGroup;
   textCtrl: FormControl;
@@ -26,11 +26,11 @@ export class MainComponent implements OnInit {
     });
 
     this.textCtrl.valueChanges.pipe(
-      debounceTime(400),
+      debounceTime(200),
       distinctUntilChanged()
     ).subscribe(val => {
       if (val) {
-        geocoder.search(val).subscribe(
+        this.geocoder.search(val).subscribe(
           places => {
             console.log(places);
             this.retrievedPlaces = places.items;

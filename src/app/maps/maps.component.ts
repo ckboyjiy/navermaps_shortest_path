@@ -1,14 +1,15 @@
 import {
   Component,
   ComponentFactoryResolver,
-  ElementRef,
-  OnInit,
+  ElementRef, EventEmitter, HostListener, Input,
+  OnInit, Output,
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
 import {NavermapsEvent, NavermapsService, NaverPlace} from '../service/navermaps.service';
 import {InfoWindowComponent} from '../info-window/info-window.component';
 import {TspService} from '../service/tsp.service';
+import {GeocoderService} from '../service/geocoder.service';
 
 @Component({
   selector: 'app-maps',
@@ -16,6 +17,7 @@ import {TspService} from '../service/tsp.service';
   styleUrls: ['./maps.component.scss']
 })
 export class MapsComponent implements OnInit {
+  @Output() openNav = new EventEmitter();
   /** View Child **/
   @ViewChild('maps') mapsDiv: ElementRef;
   /** member **/
@@ -26,51 +28,35 @@ export class MapsComponent implements OnInit {
   instancePlace;
   markers;
   shortestPath;
-  constructor(private naverService: NavermapsService, private viewContainerRef: ViewContainerRef,
-              private componentFactoryResolver: ComponentFactoryResolver,
-              private tsp: TspService) {
+  constructor(
+      private naverService: NavermapsService, private viewContainerRef: ViewContainerRef, private geocoder: GeocoderService,
+      private componentFactoryResolver: ComponentFactoryResolver, private tsp: TspService) {
     this.markers = [];
     this.initInfoWindow();
-      this.naverService.observable.subscribe((event: NavermapsEvent) => {
-      switch (event.type) {
-        case 'map':
-          switch (event.event) {
-            case 'move':
-              this.moveCenter(event.data);
-              break;
-            case 'geolocation':
-              this.maps.setCenter(event.data);
-              break;
-          }
-          break;
-        case 'marker':
-          switch (event.event) {
-            case 'draw':
-              this.drawMarker(event.data);
-              break;
-            case 'add':
-              this.pinnedMarker(event.data);
-              break;
-            case 'remove':
-              this.removeMarker(event.data);
-              break;
-          }
-          break;
-        case 'polyline':
-          switch (event.event) {
-            case 'add':
-              this.drawPolyLine(event.data);
-              break;
-          }
-          break;
-      }
+    this.eventSubscribe();
+  }
+  eventSubscribe() {
+    this.naverService.observable.subscribe((event: NavermapsEvent) => {
+      if (event.type === 'map' && event.event === 'move')         { this.moveCenter(event.data); }
+      if (event.type === 'map' && event.event === 'geolocation')  { this.maps.setCenter(event.data); }
+      if (event.type === 'map' && event.event === 'zoom')         { this.maps.setZoom(event.data); }
+      if (event.type === 'marker' && event.event === 'draw')      { this.drawMarker(event.data); }
+      if (event.type === 'marker' && event.event === 'add')       { this.pinnedMarker(event.data); }
+      if (event.type === 'marker' && event.event === 'remove')    { this.removeMarker(event.data); }
+      if (event.type === 'polyline' && event.event === 'add')     { this.drawPolyLine(event.data); }
     });
   }
 
   ngOnInit() {
     this.maps = new naver.maps.Map(this.mapsDiv.nativeElement);
-    this.initInstanceMarker();
-    this.naverService.initMaps();
+    naver.maps.Event.addListener(this.maps, 'click', (...args) => {
+      // TODO. arguments[0].coord => types 업글되면 수정 필요
+      this.clickMap(args[0].coord);
+    });
+    this.naverService.initMaps(this.maps.getZoom());
+  }
+  clickMap(coord) {
+    this.geocoder.searchCoord(coord).subscribe((v: NaverPlace) => this.drawMarker(v, false));
   }
 
   /**
@@ -93,6 +79,12 @@ export class MapsComponent implements OnInit {
       }
     });
   }
+  getInstanceMarker() {
+      if (!this.instanceMarker) {
+          this.initInstanceMarker();
+      }
+      return this.instanceMarker;
+  }
   moveCenter(point) {
     this.maps.setCenter(point);
   }
@@ -101,18 +93,20 @@ export class MapsComponent implements OnInit {
    * 지정된 장소에 인스턴스 마커를 위치시킨다.
    * @param {NaverPlace} place
    */
-  drawMarker(place: NaverPlace) {
+  drawMarker(place: NaverPlace, moveCenter = true) {
     const point = place.mapInfo.point;
     let thisMarker = this.markers.find(marker => marker.position.x === point.x && marker.position.y === point.y); // 전달받은 좌표가 존재하는지 확인
     if (!thisMarker) { // 존재하는 좌표가 아니라면
-      thisMarker = this.instanceMarker;
+      thisMarker = this.getInstanceMarker();
       if (!thisMarker.getMap()) {
         thisMarker.setMap(this.maps);
       }
       thisMarker.setPosition(point);
       this.instancePlace = place;
     }
-    this.maps.setCenter(point);
+    if (moveCenter) {
+      this.maps.setCenter(point);
+    }
     this.openInfo(thisMarker, place);
   }
 
@@ -124,16 +118,8 @@ export class MapsComponent implements OnInit {
     const point = place.mapInfo.point;
     // 해당 장소가 이미 고정된 장소가 아닌지 확인 후 추가
     if (!this.markers.find(val => val.position.x === point['x'] && val.position.y === point['y'])) {
-      // 인스턴스마커와 위치가 동일하다면 인스턴스 마커를 삭제
-      if (this.instanceMarker) {
-        const position = this.instanceMarker.getPosition();
-        if (position.x === point['x'] && position.y === point['y']) {
-          this.removeMarker(position);
-        }
-      }
       const marker = new naver.maps.Marker({
         position: point,
-        map: this.maps,
         icon: {
           url: '/assets/pinned.png',
           size: new naver.maps.Size(40, 40),
@@ -142,6 +128,14 @@ export class MapsComponent implements OnInit {
           anchor: new naver.maps.Point(11, 38)
         }
       });
+      marker.setMap(this.maps);
+      // 인스턴스마커와 위치가 동일하다면 인스턴스 마커를 삭제
+      if (this.getInstanceMarker()) {
+        const position = this.getInstanceMarker().getPosition();
+        if (position.x === point['x'] && position.y === point['y']) {
+          this.removeMarker(position);
+        }
+      }
       this.addListenerMarker(marker, place);
       this.markers.push(marker);
     }
@@ -158,7 +152,7 @@ export class MapsComponent implements OnInit {
     this.closeInfo(); // 정보창이 열려 있다면 닫는다.
     const removeTargetIndexs = [];
     // 마커는 고정된 마커 또는 인스턴스 마커 중 한 곳에만 유일한 한 값으로 존재한다.
-    this.markers.concat(this.instanceMarker).forEach((marker: naver.maps.Marker, index: number, arr) => {
+    this.markers.concat(this.getInstanceMarker()).forEach((marker: naver.maps.Marker, index: number, arr) => {
       const markerPosition = marker.getPosition();
       console.log(markerPosition['x'], point['x']);
       if (markerPosition['x'] === point['x'] && markerPosition['y'] === point['y']) {
@@ -183,7 +177,8 @@ export class MapsComponent implements OnInit {
     this.infoWindowComponent = this.viewContainerRef.createComponent(factory);
     this.infoWindowComponent.instance.place = null;
     this.infoWindow = new naver.maps.InfoWindow({
-      content: this.infoWindowComponent.location.nativeElement
+      content: this.infoWindowComponent.location.nativeElement,
+      borderColor: '#AAAAAA'
     });
   }
 
@@ -249,5 +244,9 @@ export class MapsComponent implements OnInit {
     } else {
       this.shortestPath.setPath(shortest.path.map(v => this.markers[v].getPosition()));
     }
+    this.maps.fitBounds(this.markers.map(val => {
+        return {x: val.position.x, y: val.position.y};
+    }));
+    this.openNav.emit(true);
   }
 }

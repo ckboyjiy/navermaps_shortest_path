@@ -1,4 +1,29 @@
 div.info-window {
-  width: 200px;
-  height: 100px;
+  width: 250px;
+  height: 72px;
+  display: flex;
+  padding: 3px;
+  .main {
+    flex: 1 1 auto;
+    .title {
+      font-size: 14px;
+      color: rgba(0, 0, 0, 0.7);
+    }
+    .addr {
+      color: rgba(0, 0, 0, 0.5);
+      font-size: 10px;
+    }
+  }
+  .spacer {
+    width: 1px;
+    background: rgba(0, 0, 0, 0.15);
+  }
+  .right {
+    flex: none;
+    width: 60px;
+    button {
+      min-width: 60px !important;
+    }
+  }
 }
+

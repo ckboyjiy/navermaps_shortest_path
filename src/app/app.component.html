@@ -2,6 +2,6 @@
   <app-side-nav></app-side-nav>
 </div>
 <div class="main" #main (click)="onClick($event)">
-  <app-maps></app-maps>
-  <app-main (openNav)="openNav()"></app-main>
+  <app-maps (openNav)="openNav()"></app-maps>
+  <app-main (openNav)="openNav()" [left]="left"></app-main>
 </div>

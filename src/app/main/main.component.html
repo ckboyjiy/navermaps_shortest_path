@@ -1,11 +1,11 @@
-<div class="toolbar">
+<div class="toolbar" [style.left.px]="left">
   <button mat-icon-button class="menu" (click)="clickMenu($event)"><mat-icon>dehaze</mat-icon></button>
   <form [formGroup]="searchForm" class="form">
     <input type="text" class="text" formControlName="text" (click)="isShow = true">
     <div class="search-list" *ngIf="isShow === true">
       <div class="place" *ngFor="let place of retrievedPlaces" (click)="clickPlace(place)">
-        <div [innerHtml]="place.title"></div>
-        <div class="address">{{place.mapInfo?.address}}</div>
+        <div [innerHtml]="place.title | stripTag"></div>
+        <div class="address" *ngIf="place.title !== place.mapInfo?.address">{{place.mapInfo?.address}}</div>
       </div>
     </div>
   </form>
@@ -13,3 +13,4 @@
 <div class="right-menu">
   <button mat-mini-fab class="controller" (click)="clickGeoLocation()"><mat-icon>my_location</mat-icon></button>
 </div>
+<app-zoom></app-zoom>

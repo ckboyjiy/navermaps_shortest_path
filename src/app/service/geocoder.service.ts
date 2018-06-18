@@ -10,6 +10,21 @@ import {environment} from '../../environments/environment';
 export class GeocoderService {
 
   constructor(private http: HttpClient) { }
+  searchCoord(coord): Observable<any> {
+    if (coord) {
+      return Observable.create(observer => {
+        naver.maps.Service.reverseGeocode({
+          location: coord
+        }, (status, res) => {
+          const result = {
+            title: res.result.items[0].address,
+            mapInfo: res.result.items[0]
+          };
+          observer.next(result);
+        });
+      });
+    }
+  }
   searchAddress(address: string): Observable<any> {
     if (address) {
       return Observable.create(observer => {
@@ -52,7 +67,7 @@ export class GeocoderService {
           this.searchAddress(keyword).subscribe((mapsInfo: any[]) => {
             mapsInfo.forEach(mapInfo => {
               const result = {
-                title: keyword,
+                title: mapInfo.address,
                 mapInfo: mapInfo
               };
               data.items.push(result);

@@ -18,7 +18,6 @@ export class PinnedListComponent implements OnInit {
     this.naverService.observable.pipe(
       filter((val: NavermapsEvent) => val.type === 'marker' && (val.event === 'init' || val.event === 'add' || val.event === 'remove'))
     ).subscribe(val => {
-      console.log('PinnedListComponent', val);
       if (val.event === 'init') {
         this.pinnedList = [...val.data];
       } else if (val.event === 'add') {
@@ -30,7 +29,6 @@ export class PinnedListComponent implements OnInit {
           this.pinnedList.splice(removeIndex, 1);
         }
       }
-      console.log('Pinned List', this.pinnedList);
     });
   }
   removePinnedMarker(place: NaverPlace) {

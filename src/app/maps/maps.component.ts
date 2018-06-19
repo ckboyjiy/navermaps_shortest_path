@@ -28,6 +28,7 @@ export class MapsComponent implements OnInit {
   instancePlace;
   markers;
   shortestPath;
+  geoMarker;
   constructor(
       private naverService: NavermapsService, private viewContainerRef: ViewContainerRef, private geocoder: GeocoderService,
       private componentFactoryResolver: ComponentFactoryResolver, private tsp: TspService) {
@@ -38,7 +39,7 @@ export class MapsComponent implements OnInit {
   eventSubscribe() {
     this.naverService.observable.subscribe((event: NavermapsEvent) => {
       if (event.type === 'map' && event.event === 'move')         { this.moveCenter(event.data); }
-      if (event.type === 'map' && event.event === 'geolocation')  { this.maps.setCenter(event.data); }
+      if (event.type === 'map' && event.event === 'geolocation')  { this.setGeolocation(event.data); }
       if (event.type === 'map' && event.event === 'zoom')         { this.maps.setZoom(event.data); }
       if (event.type === 'marker' && event.event === 'draw')      { this.drawMarker(event.data); }
       if (event.type === 'marker' && event.event === 'add')       { this.pinnedMarker(event.data); }
@@ -56,6 +57,33 @@ export class MapsComponent implements OnInit {
       this.naverService.changedZoom(event);
     });
     this.naverService.initMaps(this.maps.getZoom());
+  }
+  drawGeoMarker(data) {
+    this.geoMarker = new naver.maps.Marker({
+      map: this.maps,
+      position: data,
+      icon: {
+        url: '/assets/crosshair.png',
+        size: new naver.maps.Size(20, 20),
+        scaledSize: new naver.maps.Size(20, 20),
+        origin: new naver.maps.Point(0, 0),
+        anchor: new naver.maps.Point(10, 10)
+      }
+    });
+  }
+  removeGeoMarker() {
+    this.geoMarker.setMap(null);
+  }
+  setGeolocation(data) {
+    console.log(data);
+    if (data) {
+      if (data.isFirst) {
+        this.maps.setCenter(data);
+      }
+      this.drawGeoMarker(data);
+    } else {
+      this.removeGeoMarker();
+    }
   }
   clickMap(coord: naver.maps.Coord) {
     this.geocoder.searchCoord(coord).subscribe((v: NaverPlace) => this.drawMarker(v, false));

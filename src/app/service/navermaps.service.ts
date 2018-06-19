@@ -103,14 +103,16 @@ export class NavermapsService {
   }
   watchGeoLocation() {
     console.log('start watch');
+    let isFirst = true;
     this._watchLocation = navigator.geolocation.watchPosition( succ => {
       const x = succ.coords.longitude;
       const y = succ.coords.latitude;
       this._subject.next({
         type: 'map',
         event: 'geolocation',
-        data: {x : x, y: y}
+        data: {x : x, y: y, isFirst: isFirst}
       });
+      isFirst = false;
     }, err => {
       // subscriber.error(err);
     });
@@ -118,6 +120,11 @@ export class NavermapsService {
   stopWatch() {
     console.log('stop watch');
     navigator.geolocation.clearWatch(this._watchLocation);
+    this._subject.next({
+      type: 'map',
+      event: 'geolocation',
+      data: null
+    });
   }
   getShortestPath() {
     this._subject.next({

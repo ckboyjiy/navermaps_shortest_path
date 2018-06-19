@@ -1,5 +1,6 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, Observer} from 'rxjs';
+import {MarkerType, OverlayFactoryService} from './overlay-factory.service';
 
 /**
  * 컴포넌트간의 네이버맵스관련 이벤트를 주고 받기 위한 서비스
@@ -10,19 +11,20 @@ import {BehaviorSubject, Observable, Observer} from 'rxjs';
 export class NavermapsService {
   private readonly _observable: Observable<NavermapsEvent>;
   private _subject: BehaviorSubject<NavermapsEvent>;
-  private _pinnedList: NaverPlace[] = [];
+  private _depart: naver.maps.Marker;
+  private _travelList: naver.maps.Marker[] = [];
   private _zoom: number;
   private _watchLocation;
   get observable(): Observable<NavermapsEvent> {
     return this._observable;
   }
-  constructor() {
+  constructor(private overlayFactory: OverlayFactoryService) {
     this._subject = new BehaviorSubject<NavermapsEvent>({type: 'init'});
     this._observable = new Observable<NavermapsEvent>(subscriber => {
       subscriber.next({
         type: 'marker',
         event: 'init',
-        data: this._pinnedList
+        data: this._travelList
       });
       this._subject.subscribe(value => subscriber.next(value), error => subscriber.error(error), () => subscriber.complete());
       return {unsubscribe() {console.log('unsubscribe'); } };
@@ -44,25 +46,50 @@ export class NavermapsService {
     });
   }
   drawMarker(place: NaverPlace) {
-    this._subject.next({
-      type: 'marker',
-      event: 'draw',
-      data: place
-    });
+    if (this._isDrewPlace(place) === false) {
+      this._subject.next({
+        type: 'marker',
+        event: 'draw',
+        data: place
+      });
+    }
   }
 
   /**
-   * 고정된 장소 추가
+   * 출발지나 여행지에 이미 추가된 장소인지 확인한다.
+   * @param {NaverPlace} place
+   * @returns {boolean}
+   * @private
+   */
+  _isDrewPlace(place: NaverPlace) {
+    let result = false;
+    if (this._depart && this._depart['place'] === place) { result = true; }
+    if (this._travelList.findIndex(m => m['place'] === place) > -1) { result = true; }
+    return result;
+  }
+  makeDepartMarker(place: NaverPlace) {
+    const newDepart = this.overlayFactory.createMarker(MarkerType.DEPART, place);
+    this._subject.next({
+      type: 'marker',
+      event: 'setDepart',
+      data: newDepart
+    });
+    this._depart = newDepart;
+  }
+
+  /**
+   * 여행지 추가
    * @param {NaverPlace} place
    */
-  addPinnedMarker(place: NaverPlace) {
-    if (this._pinnedList.findIndex(p => p === place) === -1) {
+  addTravelMarker(place: NaverPlace) {
+    if (this._travelList.findIndex(m => m['place'] === place) === -1) {
       // 새로운 장소인 경우
-      this._pinnedList.push(place); // 고정리스트에 추가
+      const newMarker = this.overlayFactory.createMarker(MarkerType.TRAVEL, place);
+      this._travelList.push(newMarker); // 고정리스트에 추가
       this._subject.next({ // 맵에 마커를 그리도록 이벤트 전송
         type: 'marker',
-        event: 'add',
-        data: place
+        event: 'addTravel',
+        data: newMarker
       });
     } else {
       // 이미 추가된 장소인 경우, 단순히 그 마커의 위치로 이동시킴
@@ -73,32 +100,15 @@ export class NavermapsService {
       });
     }
   }
-  removeMarker(point: naver.maps.PointObjectLiteral) {
-    const index = this._pinnedList.findIndex(place => {
-      const placePoint = place.mapInfo.point;
-      return placePoint && point && placePoint.x === point['x'] && placePoint.y === point['y'] ? true : false;
-    });
+  removeMarker(marker: naver.maps.Marker) {
+    const index = this._travelList.findIndex(m => m === marker);
     if (index > -1) {
-      this._pinnedList.splice(index, 1);
+      this._travelList.splice(index, 1);
     }
     this._subject.next({
       type: 'marker',
       event: 'remove',
-      data: point
-    });
-  }
-  getGeoLocation() {
-    const watchId = navigator.geolocation.watchPosition( succ => {
-      navigator.geolocation.clearWatch(watchId);
-      const x = succ.coords.longitude;
-      const y = succ.coords.latitude;
-      this._subject.next({
-        type: 'map',
-        event: 'geolocation',
-        data: {x : x, y: y}
-      });
-    }, err => {
-      // subscriber.error(err);
+      data: marker
     });
   }
   watchGeoLocation() {
@@ -130,7 +140,21 @@ export class NavermapsService {
     this._subject.next({
       type: 'polyline',
       event: 'add',
-      data: null
+      data: [this._depart].concat(this._travelList)
+    });
+  }
+  _makeEdges() {
+    const markers = [this._depart].concat(this._travelList);
+    return markers.map((marker1: naver.maps.Marker, i) => {
+      return markers.map((marker2: naver.maps.Marker, j) => {
+        const polyline = new naver.maps.Polyline({ // 2. 간선에 대한 거리를 계산한다.
+          visible: false,
+          path: [marker1.getPosition(), marker2.getPosition()]
+        });
+        const distance = polyline.getDistance();
+        polyline.setMap(null);
+        return distance;
+      });
     });
   }
 }

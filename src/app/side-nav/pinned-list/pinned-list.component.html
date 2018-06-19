@@ -1,8 +1,10 @@
-<div class="header">Pinned Place</div>
-<div class="pinned-list">
-  <div *ngFor="let place of pinnedList" class="pinned-place">
-    <div class="title">{{place.title | stripTag}}</div>
-    <div class="btn" (click)="removePinnedMarker(place)"><button mat-icon-button><mat-icon>clear</mat-icon></button></div>
+<div class="header">출발지</div>
+<div class="depart">{{depart ? depart['place'].title : '출발지를 지정해주세요.'}}</div>
+<div class="header">여행지 목록</div>
+<div class="travel-list">
+  <div *ngFor="let marker of pinnedList" class="place">
+    <div class="title">{{marker['place'].title | stripTag}}</div>
+    <div class="btn" (click)="removePinnedMarker(marker)"><button mat-icon-button><mat-icon>clear</mat-icon></button></div>
   </div>
 </div>
 <div class="btn-list" *ngIf="pinnedList.length > 1">

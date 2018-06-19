@@ -1,8 +1,9 @@
 div.info-window {
   width: 250px;
-  height: 72px;
+  height: 100px;
   display: flex;
   padding: 3px;
+  flex-direction: column;
   .main {
     flex: 1 1 auto;
     .title {
@@ -15,13 +16,15 @@ div.info-window {
     }
   }
   .spacer {
-    width: 1px;
+    min-height: 1px;
     background: rgba(0, 0, 0, 0.15);
   }
   .right {
     flex: none;
-    width: 60px;
+    display: flex;
     button {
+      flex: 1 1 auto;
+      font-size: 11px;
       min-width: 60px !important;
     }
   }

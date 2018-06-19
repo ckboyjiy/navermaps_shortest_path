@@ -9,15 +9,20 @@ import {NavermapsService, NaverPlace} from '../service/navermaps.service';
 export class InfoWindowComponent implements OnInit {
 
   @Input() marker: naver.maps.Marker;
-  @Input() place: NaverPlace;
   constructor(private naverService: NavermapsService) { }
 
   ngOnInit() {
   }
-  addPlace() {
-    this.naverService.addPinnedMarker(this.place);
+  isEqualMarker(marker: naver.maps.Marker) {
+    return this.marker === marker;
+  }
+  setDepart() {
+    this.naverService.makeDepartMarker(this.marker['place']);
+  }
+  addTravelPlace() {
+    this.naverService.addTravelMarker(this.marker['place']);
   }
   removeMarker() {
-    this.naverService.removeMarker(this.place.mapInfo.point);
+    this.naverService.removeMarker(this.marker);
   }
 }

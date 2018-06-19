@@ -59,17 +59,19 @@ export class MapsComponent implements OnInit {
     this.naverService.initMaps(this.maps.getZoom());
   }
   drawGeoMarker(data) {
-    this.geoMarker = new naver.maps.Marker({
-      map: this.maps,
-      position: data,
-      icon: {
-        url: '/assets/crosshair.png',
-        size: new naver.maps.Size(20, 20),
-        scaledSize: new naver.maps.Size(20, 20),
-        origin: new naver.maps.Point(0, 0),
-        anchor: new naver.maps.Point(10, 10)
-      }
-    });
+    if (this.geoMarker === null) {
+      this.geoMarker = new naver.maps.Marker({
+        map: this.maps,
+        icon: {
+          url: '/assets/crosshair.png',
+          size: new naver.maps.Size(20, 20),
+          scaledSize: new naver.maps.Size(20, 20),
+          origin: new naver.maps.Point(0, 0),
+          anchor: new naver.maps.Point(10, 10)
+        }
+      });
+    }
+    this.geoMarker.setPosition(data);
   }
   removeGeoMarker() {
     this.geoMarker.setMap(null);

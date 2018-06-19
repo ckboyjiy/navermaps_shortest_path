@@ -72,6 +72,9 @@ export class MapsComponent implements OnInit {
         }
       });
     } else {
+      if (this.geoMarker.getMap() === null) {
+        this.geoMarker.setMap(this.maps);
+      }
       this.geoMarker.setPosition(data);
     }
   }

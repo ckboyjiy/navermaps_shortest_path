@@ -52,7 +52,4 @@ export class MainComponent implements OnInit {
     this.naverService.drawMarker(place);
     this.isShow = false;
   }
-  clickGeoLocation() {
-    this.naverService.getGeoLocation();
-  }
 }

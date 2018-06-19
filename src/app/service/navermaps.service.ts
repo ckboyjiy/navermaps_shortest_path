@@ -12,6 +12,7 @@ export class NavermapsService {
   private _subject: BehaviorSubject<NavermapsEvent>;
   private _pinnedList: NaverPlace[] = [];
   private _zoom: number;
+  private _watchLocation;
   get observable(): Observable<NavermapsEvent> {
     return this._observable;
   }
@@ -99,6 +100,24 @@ export class NavermapsService {
     }, err => {
       // subscriber.error(err);
     });
+  }
+  watchGeoLocation() {
+    console.log('start watch');
+    this._watchLocation = navigator.geolocation.watchPosition( succ => {
+      const x = succ.coords.longitude;
+      const y = succ.coords.latitude;
+      this._subject.next({
+        type: 'map',
+        event: 'geolocation',
+        data: {x : x, y: y}
+      });
+    }, err => {
+      // subscriber.error(err);
+    });
+  }
+  stopWatch() {
+    console.log('stop watch');
+    navigator.geolocation.clearWatch(this._watchLocation);
   }
   getShortestPath() {
     this._subject.next({

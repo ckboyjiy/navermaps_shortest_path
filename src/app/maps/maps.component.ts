@@ -49,16 +49,15 @@ export class MapsComponent implements OnInit {
 
   ngOnInit() {
     this.maps = new naver.maps.Map(this.mapsDiv.nativeElement);
-    naver.maps.Event.addListener(this.maps, 'click', (...args) => {
-      // TODO. arguments[0].coord => types 업글되면 수정 필요
-      this.clickMap(args[0].coord);
+    naver.maps.Event.addListener(this.maps, 'click', (event) => {
+      this.clickMap(event.coord);
     });
-    naver.maps.Event.addListener(this.maps, 'zoom_changed', (...args) => {
-      this.naverService.changedZoom(args[0]);
-    })
+    naver.maps.Event.addListener(this.maps, 'zoom_changed', (event) => {
+      this.naverService.changedZoom(event);
+    });
     this.naverService.initMaps(this.maps.getZoom());
   }
-  clickMap(coord) {
+  clickMap(coord: naver.maps.Coord) {
     this.geocoder.searchCoord(coord).subscribe((v: NaverPlace) => this.drawMarker(v, false));
   }
 

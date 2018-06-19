@@ -13,6 +13,7 @@ import { StripTagPipe } from './pipes/strip-tag.pipe';
 import { SideNavComponent } from './side-nav/side-nav.component';
 import { PinnedListComponent } from './side-nav/pinned-list/pinned-list.component';
 import { ZoomComponent } from './main/zoom/zoom.component';
+import { GpsComponent } from './main/gps/gps.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { ZoomComponent } from './main/zoom/zoom.component';
     StripTagPipe,
     SideNavComponent,
     PinnedListComponent,
-    ZoomComponent
+    ZoomComponent,
+    GpsComponent
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule, HttpClientModule, HttpClientJsonpModule, FormsModule, ReactiveFormsModule,

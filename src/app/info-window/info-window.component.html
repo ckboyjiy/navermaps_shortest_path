@@ -1,12 +1,12 @@
 <div class="info-window">
     <div class="main">
-        <div class="title">{{marker ? (marker['place'].title | stripTag) : ''}}</div>
-        <div class="addr" *ngIf="marker && marker['place'].title !== marker['place'].mapInfo.address">{{marker['place'].mapInfo.address}}</div>
+        <div class="title">{{_marker ? (_marker['place'].title | stripTag) : ''}}</div>
+        <div class="addr" *ngIf="_marker && _marker['place'].title !== _marker['place'].mapInfo.address">{{_marker['place'].mapInfo.address}}</div>
     </div>
     <div class="spacer"></div>
     <div class="right">
-        <button mat-button (click)="setDepart()">출발지 지정</button>
-        <button mat-button (click)="addTravelPlace()">여행지 담기</button>
+        <button mat-button (click)="setDepart()" *ngIf="!isDepart && !isTravel">출발지 지정</button>
+        <button mat-button (click)="addTravelPlace()" *ngIf="!isDepart && !isTravel">여행지 담기</button>
         <button mat-button (click)="removeMarker()">삭제</button>
     </div>
 </div>

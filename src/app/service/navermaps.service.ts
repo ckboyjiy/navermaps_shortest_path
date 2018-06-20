@@ -143,18 +143,11 @@ export class NavermapsService {
       data: [this._depart].concat(this._travelList)
     });
   }
-  _makeEdges() {
-    const markers = [this._depart].concat(this._travelList);
-    return markers.map((marker1: naver.maps.Marker, i) => {
-      return markers.map((marker2: naver.maps.Marker, j) => {
-        const polyline = new naver.maps.Polyline({ // 2. 간선에 대한 거리를 계산한다.
-          visible: false,
-          path: [marker1.getPosition(), marker2.getPosition()]
-        });
-        const distance = polyline.getDistance();
-        polyline.setMap(null);
-        return distance;
-      });
+  moveTo(marker: naver.maps.Marker) {
+    this._subject.next({
+      type: 'map',
+      event: 'move',
+      data: marker['place'].mapInfo.point
     });
   }
 }

@@ -47,4 +47,7 @@ export class PinnedListComponent implements OnInit {
   getShortestPath() {
     this.naverService.getShortestPath();
   }
+  _moveTo(marker: naver.maps.Marker) {
+    this.naverService.moveTo(marker);
+  }
 }

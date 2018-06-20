@@ -1,7 +1,7 @@
 import {
   Component,
   ComponentFactoryResolver,
-  ElementRef, EventEmitter, HostListener, Input,
+  ElementRef, EventEmitter, Input,
   OnInit, Output,
   ViewChild,
   ViewContainerRef
@@ -11,13 +11,27 @@ import {InfoWindowComponent} from '../info-window/info-window.component';
 import {TspService} from '../service/tsp.service';
 import {GeocoderService} from '../service/geocoder.service';
 import {MarkerType, OverlayFactoryService} from '../service/overlay-factory.service';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-maps',
   templateUrl: './maps.component.html',
-  styleUrls: ['./maps.component.scss']
+  styleUrls: ['./maps.component.scss'],
+  animations: [
+    trigger('isShrink', [
+      state('true', style({
+        marginLeft: '250px'
+      })),
+      state('false', style({
+        marginLeft: '0px'
+      })),
+      transition('* => true', animate('500ms ease-in')),
+      transition('* => false', animate('500ms ease-in'))
+    ])
+  ]
 })
 export class MapsComponent implements OnInit {
+  @Input() isShrink: boolean;
   @Output() openNav = new EventEmitter();
   /** View Child **/
   @ViewChild('maps') mapsDiv: ElementRef;
@@ -51,6 +65,14 @@ export class MapsComponent implements OnInit {
   ngOnInit() {
     this.initMap();
     this.initInstanceMarker();
+  }
+  resize(event) {
+    const width = window.getComputedStyle(this.mapsDiv.nativeElement, null).getPropertyValue('width');
+    const height = window.getComputedStyle(this.mapsDiv.nativeElement, null).getPropertyValue('height');
+    this.maps.setSize({
+      width: parseInt(width, 10),
+      height: parseInt(height, 10)
+    });
   }
 
   /**
@@ -123,6 +145,7 @@ export class MapsComponent implements OnInit {
     this._addMarkerEvent(this.instanceMarker);
   }
   moveCenter(point: naver.maps.PointObjectLiteral) {
+    console.log(this.maps.getSize());
     this.maps.panTo(point, {});
   }
 

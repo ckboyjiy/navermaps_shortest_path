@@ -1,1 +1,1 @@
-<div #maps class="maps"></div>
+<div #maps class="maps" [@isShrink]="isShrink" (@isShrink.done)="resize($event)"></div>

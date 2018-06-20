@@ -13,12 +13,17 @@
   left: 0px;
   background: #FFF;
   overflow-x: hidden;
-  transition: 0.5s;
   box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
 }
 .main {
-  transition: 0.5s;
   height: 100vh;
   padding: 0px;
   margin: 0px;
+}
+
+app-main {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
 }

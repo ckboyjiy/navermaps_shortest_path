@@ -1,4 +1,4 @@
-<div class="toolbar" [style.left.px]="left">
+<div class="toolbar" [@isShrink]="isShrink">
   <button mat-icon-button class="menu" (click)="clickMenu($event)"><mat-icon>dehaze</mat-icon></button>
   <form [formGroup]="searchForm" class="form">
     <input type="text" class="text" formControlName="text" (click)="isShow = true">

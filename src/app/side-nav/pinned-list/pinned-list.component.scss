@@ -13,14 +13,27 @@
 
 .depart {
   color: rgba(0, 0, 0, 0.7);
+  padding: 5px 0px 5px 10px;
   margin-bottom: 15px;
   font-size: 11px;
+  cursor: pointer;
+}
+.depart:hover {
+  background: rgba(38, 200, 0, 0.1);
+}
+
+.non {
+  cursor: default !important;
+}
+.non:hover {
+  background: #FFF !important;
 }
 
 .travel-list {
   color: rgba(0, 0, 0, 0.7);
   margin-bottom: 5px;
   .place {
+    cursor: pointer;
     padding-left: 10px;
     font-size: 11px;
     display: flex;

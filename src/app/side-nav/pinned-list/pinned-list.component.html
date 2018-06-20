@@ -1,9 +1,10 @@
 <div class="header">출발지</div>
-<div class="depart">{{depart ? depart['place'].title : '출발지를 지정해주세요.'}}</div>
+<div class="depart" *ngIf="depart" (click)="_moveTo(depart)">{{depart['place'].title}}</div>
+<div class="non depart" *ngIf="!depart">출발지를 지정해주세요.</div>
 <div class="header">여행지 목록</div>
 <div class="travel-list">
   <div *ngFor="let marker of pinnedList" class="place">
-    <div class="title">{{marker['place'].title | stripTag}}</div>
+    <div class="title" (click)="_moveTo(marker)">{{marker['place'].title | stripTag}}</div>
     <div class="btn" (click)="removePinnedMarker(marker)"><button mat-icon-button><mat-icon>clear</mat-icon></button></div>
   </div>
 </div>

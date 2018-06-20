@@ -11,5 +11,4 @@ export class SideNavComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }

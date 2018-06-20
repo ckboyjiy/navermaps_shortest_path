@@ -1,4 +1,4 @@
-<app-side-nav class="side-nav" [@isOpen]="isShow"></app-side-nav>
+<app-side-nav class="side-nav" [@isOpen]="isShow" (swipeleft)="openNav()"></app-side-nav>
 <div class="main" #main (click)="onClick($event)">
   <app-maps (openNav)="openNav()" [isShrink]="isShow"></app-maps>
   <app-main (openNav)="openNav()" [isShrink]="isShow"></app-main>

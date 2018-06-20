@@ -143,6 +143,13 @@ export class NavermapsService {
       data: [this._depart].concat(this._travelList)
     });
   }
+  resultShortestPath(path) {
+    this._subject.next({
+      type: 'polyline',
+      event: 'shortestPath',
+      data: path
+    });
+  }
   moveTo(marker: naver.maps.Marker) {
     this._subject.next({
       type: 'map',

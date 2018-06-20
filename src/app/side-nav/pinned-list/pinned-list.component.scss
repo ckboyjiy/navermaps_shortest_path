@@ -57,3 +57,41 @@
   margin-top: 15px;
   border-top: 1px solid #00c73c;
 }
+
+.result {
+  margin-top: 10px;
+  .distance {
+
+  }
+  .path {
+    font-size: 12px;
+    .place {
+      margin: 3px 0px;
+      display: flex;
+      .seq {
+        width: 24px;
+        text-align: center;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.8);
+        flex: none;
+        padding: 0px;
+        border-radius: 10px;
+        background: rgba(100, 210, 105, 0.8);
+        border: 4px double rgb(100, 210, 105);
+      }
+      .first {
+        background: rgba(255, 0, 0, 0.8) !important;
+        border: 4px double rgb(255, 0, 0) !important;
+      }
+      .last {
+        background: rgba(0, 0, 255, 0.8) !important;
+        border: 4px double rgb(0, 0, 255) !important;
+      }
+      .title {
+        flex: 1 1 auto;
+        color: rgba(0, 0, 0, 0.8);
+        padding: 4px;
+      }
+    }
+  }
+}

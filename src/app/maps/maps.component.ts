@@ -43,9 +43,11 @@ export class MapsComponent implements OnInit {
   geoMarker: naver.maps.Marker;
   departMarker: naver.maps.Marker;
   shortestPath;
+  snackBar;
   constructor(
       private naverService: NavermapsService, private viewContainerRef: ViewContainerRef, private geocoder: GeocoderService,
-      private componentFactoryResolver: ComponentFactoryResolver, private tsp: TspService, private overlayFactory: OverlayFactoryService) {
+      private componentFactoryResolver: ComponentFactoryResolver, private tsp: TspService, private overlayFactory: OverlayFactoryService,
+      private ref: ElementRef) {
     this.initInfoWindow();
     this.eventSubscribe();
   }
@@ -196,7 +198,6 @@ export class MapsComponent implements OnInit {
   initInfoWindow() {
     const factory = this.componentFactoryResolver.resolveComponentFactory(InfoWindowComponent);
     this.infoWindowComponent = this.viewContainerRef.createComponent(factory);
-    this.infoWindowComponent.instance.place = null;
     this.infoWindow = new naver.maps.InfoWindow({
       content: this.infoWindowComponent.location.nativeElement,
       borderColor: '#AAAAAA'
@@ -227,14 +228,14 @@ export class MapsComponent implements OnInit {
   drawPolyLine(markers: naver.maps.Marker[]) {
     this.closeInfo();
     /** 1. 마커들 간의 간선 거리를 표현한 이차원 배열 준비 */
-    const perm = this.makeEdges(markers);
-    console.log(perm);
+    const perm = this._makeEdges(markers);
 
     /** 2. TSP를 이용하여 최단경로를 계산한다. */
     const minPath = this.tsp.shortestPath(perm);
-    this.drawEdges(markers, minPath);
+    this._drawEdges(markers, minPath);
+    this.naverService.resultShortestPath(minPath);
   }
-  makeEdges(markers: naver.maps.Marker[]) {
+  _makeEdges(markers: naver.maps.Marker[]) {
     return markers.map((marker1: naver.maps.Marker, i) => {
       return markers.map((marker2: naver.maps.Marker, j) => {
         const polyline = new naver.maps.Polyline({ // 2. 간선에 대한 거리를 계산한다.
@@ -248,7 +249,7 @@ export class MapsComponent implements OnInit {
       });
     });
   }
-  drawEdges(markers: naver.maps.Marker[], shortest) {
+  _drawEdges(markers: naver.maps.Marker[], shortest) {
     if (!this.shortestPath) {
       this.shortestPath = new naver.maps.Polyline({ // 2. 간선에 대한 거리를 계산한다.
         map: this.maps,
@@ -263,18 +264,7 @@ export class MapsComponent implements OnInit {
     this.maps.fitBounds(markers.map((marker: naver.maps.Marker) => {
         return {x: marker['position'].x, y: marker['position'].y};
     }));
-    this.openNav.emit(true);
-  }
-
-  /**
-   * a와 b의 좌표가 같은지 확인 후 결과를 반환한다.
-   * @param a
-   * @param b
-   * @returns {boolean}
-   * @private
-   */
-  _isEqualPosition(a, b) {
-    return a && a['x'] === b['x'] && a['y'] === b['y'];
+    // this.openNav.emit(true);
   }
 
   /**

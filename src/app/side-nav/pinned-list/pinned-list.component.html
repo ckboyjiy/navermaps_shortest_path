@@ -8,6 +8,17 @@
     <div class="btn" (click)="removePinnedMarker(marker)"><button mat-icon-button><mat-icon>clear</mat-icon></button></div>
   </div>
 </div>
-<div class="btn-list" *ngIf="pinnedList.length > 1">
-  <button mat-button (click)="getShortestPath()">최단 경로 추천</button>
+<div class="btn-list" *ngIf="depart && pinnedList.length > 1">
+  <button mat-button (click)="getShortestPath()">추천 경로 확인</button>
+</div>
+<div class="result" *ngIf="result">
+  <div class="distance">총 거리 : 약 {{result.distance | distance}}</div>
+  <div class="path">
+    <div class="place" *ngFor="let place of result.path ; index as i; first as first; last as last">
+      <div class="seq first" *ngIf="first">출발</div>
+      <div class="seq" *ngIf="!first && !last">{{i}}</div>
+      <div class="seq last" *ngIf="last">도착</div>
+      <div class="title">{{place.title | stripTag}}</div>
+    </div>
+  </div>
 </div>

@@ -14,6 +14,7 @@ import { SideNavComponent } from './side-nav/side-nav.component';
 import { PinnedListComponent } from './side-nav/pinned-list/pinned-list.component';
 import { ZoomComponent } from './main/zoom/zoom.component';
 import { GpsComponent } from './main/gps/gps.component';
+import { DistancePipe } from './pipes/distance.pipe';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { GpsComponent } from './main/gps/gps.component';
     SideNavComponent,
     PinnedListComponent,
     ZoomComponent,
-    GpsComponent
+    GpsComponent,
+    DistancePipe
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule, HttpClientModule, HttpClientJsonpModule, FormsModule, ReactiveFormsModule,
@@ -36,7 +38,7 @@ import { GpsComponent } from './main/gps/gps.component';
     HttpClientModule, HttpClientJsonpModule
   ],
   entryComponents: [
-    MainComponent, InfoWindowComponent
+    InfoWindowComponent
   ],
   bootstrap: [AppComponent]
 })

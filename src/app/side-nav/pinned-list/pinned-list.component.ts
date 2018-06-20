@@ -12,6 +12,7 @@ export class PinnedListComponent implements OnInit {
 
   depart: naver.maps.Marker;
   pinnedList: naver.maps.Marker[];
+  result: any;
   constructor(private naverService: NavermapsService) {
     this.depart = null;
     this.pinnedList = [];
@@ -19,26 +20,13 @@ export class PinnedListComponent implements OnInit {
 
   ngOnInit() {
     this.naverService.observable.pipe(
-      filter((val: NavermapsEvent) => {
-        return val.type === 'marker' &&
-            (val.event === 'init' || val.event === 'addTravel' || val.event === 'setDepart' || val.event === 'remove');
-      })
+      filter((val: NavermapsEvent) => val.type === 'marker' || val.type === 'polyline')
     ).subscribe(val => {
-      if (val.event === 'init') { this.pinnedList = [...val.data]; }
-      if (val.event === 'addTravel') { this.pinnedList.push(val.data); }
-      if (val.event === 'setDepart') { this.depart = val.data; }
-      if (val.event === 'remove') {
-        const marker = <naver.maps.Marker> val.data;
-        if (marker['type'] === MarkerType.TRAVEL) {
-          const removeIndex = this.pinnedList.findIndex(m => m === marker);
-          if (removeIndex > -1) {
-            this.pinnedList.splice(removeIndex, 1);
-          }
-        }
-        if (marker['type'] === MarkerType.DEPART) {
-          this.depart = null;
-        }
-      }
+      if (val.type === 'marker' && val.event === 'init')      { this.pinnedList = [...val.data]; }
+      if (val.type === 'marker' && val.event === 'addTravel') { this.pinnedList.push(val.data); }
+      if (val.type === 'marker' && val.event === 'setDepart') { this.depart = val.data; }
+      if (val.type === 'marker' && val.event === 'remove')    { this._remove(val.data); }
+      if (val.type === 'polyline' && val.event === 'shortestPath') { this._resultShortestPath(val.data); }
     });
   }
   removePinnedMarker(marker: naver.maps.Marker) {
@@ -49,5 +37,25 @@ export class PinnedListComponent implements OnInit {
   }
   _moveTo(marker: naver.maps.Marker) {
     this.naverService.moveTo(marker);
+  }
+  _remove(marker: naver.maps.Marker) {
+    if (marker['type'] === MarkerType.TRAVEL) {
+      const removeIndex = this.pinnedList.findIndex(m => m === marker);
+      if (removeIndex > -1) {
+        this.pinnedList.splice(removeIndex, 1);
+      }
+    }
+    if (marker['type'] === MarkerType.DEPART) {
+      this.depart = null;
+    }
+    this.result = null;
+  }
+  _resultShortestPath(result) {
+    const temp = [this.depart].concat(this.pinnedList);
+    this.result = {
+      distance: result.distance,
+      path: result.path.map( v => temp[v]['place'])
+    };
+    console.log(this.result);
   }
 }

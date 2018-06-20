@@ -11,7 +11,6 @@ export class StripTagPipe implements PipeTransform {
     } else {
       return value;
     }
-
   }
 
 }

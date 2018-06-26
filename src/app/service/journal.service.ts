@@ -33,7 +33,11 @@ export class JournalService {
     return result.filter(v => v.hasOwnProperty('id'));
   }
   getJournal(id: string) {
-    return JSON.parse(localStorage.getItem(id));
+    const result = JSON.parse(localStorage.getItem(id));
+    if (id === 'tempJournal') {
+      localStorage.removeItem(id);
+    }
+    return result;
   }
   saveJournal(journal: Journal) {
     console.log(journal);

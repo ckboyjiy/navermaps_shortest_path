@@ -62,6 +62,6 @@ export class PinnedListComponent implements OnInit {
   }
   createJournal() {
     const journal = this.journal.tempJournal(this.result.path);
-    this.router.navigate([`/journal/${journal.id}`]);
+    this.router.navigate([`/journal/new`]);
   }
 }

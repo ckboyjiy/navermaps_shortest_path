@@ -21,7 +21,7 @@ export class DetailComponent implements OnInit {
 
   ngOnInit() {
     this.route.paramMap.subscribe((params: ParamMap) => {
-      this.id = params.get('id');
+      this.id = params.get('id') === 'new' ? 'tempJournal' : params.get('id');
     });
   }
   getList() {
@@ -30,6 +30,7 @@ export class DetailComponent implements OnInit {
   save() {
     this.journal.date = new Date(Date.now());
     this.journalService.saveJournal(this.journal);
+    this.router.navigate(['/journal']);
   }
   back() {
     this.location.back();

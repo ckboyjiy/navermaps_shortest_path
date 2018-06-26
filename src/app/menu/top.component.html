@@ -1,0 +1,14 @@
+<div class="toolbar" [@isShrink]="isShrink">
+  <button mat-icon-button class="menu" (click)="clickMenu($event)"><mat-icon>dehaze</mat-icon></button>
+  <form [formGroup]="searchForm" class="form">
+    <input type="text" class="text" formControlName="text" (click)="isShow = true" #text>
+    <div class="search-list" *ngIf="isShow === true">
+      <div class="place" *ngFor="let place of retrievedPlaces" (click)="clickPlace(place)">
+        <div [innerHtml]="place.title | stripTag"></div>
+        <div class="address" *ngIf="place.title !== place.mapInfo?.address">{{place.mapInfo?.address}}</div>
+      </div>
+    </div>
+  </form>
+</div>
+<app-gps></app-gps>
+<app-zoom></app-zoom>

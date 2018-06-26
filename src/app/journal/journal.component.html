@@ -5,8 +5,8 @@
 <div class="list">
   <div class="travel" *ngFor="let journal of journals" (click)="go(journal.id)">
     <div class="travel-title">{{journal.title}}</div>
-    <div class="travel-date">-</div>
+    <div class="travel-date">{{journal.date | date:'yyyy-MM-dd'}}</div>
     <div class="travel-places">{{getPath(journal) | stripTag}}</div>
   </div>
 </div>
-<button mat-fab class="add-travel" routerLink="/journal/detail"><mat-icon>note_add</mat-icon></button>
+<!--<button mat-fab class="add-travel" routerLink="/journal/detail"><mat-icon>note_add</mat-icon></button>-->

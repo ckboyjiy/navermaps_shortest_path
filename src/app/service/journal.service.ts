@@ -44,6 +44,7 @@ export class JournalService {
 export interface Journal {
   id: string;
   title: string;
+  date: Date;
   contents: JournalContents[];
 }
 

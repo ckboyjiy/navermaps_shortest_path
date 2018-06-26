@@ -28,6 +28,7 @@ export class DetailComponent implements OnInit {
     return this.journal.contents.filter( (v, i, a) => i > 0 && i < a.length - 1);
   }
   save() {
+    this.journal.date = new Date(Date.now());
     this.journalService.saveJournal(this.journal);
   }
   back() {

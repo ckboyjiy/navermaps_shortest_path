@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {NavermapsEvent, NavermapsService, NaverPlace} from '../../service/navermaps.service';
+import {NavermapsEvent, NavermapsService} from '../../service/navermaps.service';
 import { filter } from 'rxjs/operators';
 import {MarkerType} from '../../service/overlay-factory.service';
+import {JournalService} from '../../service/journal.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-pinned-list',
@@ -13,7 +15,7 @@ export class PinnedListComponent implements OnInit {
   depart: naver.maps.Marker;
   pinnedList: naver.maps.Marker[];
   result: any;
-  constructor(private naverService: NavermapsService) {
+  constructor(private naverService: NavermapsService, private journal: JournalService, private router: Router) {
     this.depart = null;
     this.pinnedList = [];
   }
@@ -57,5 +59,9 @@ export class PinnedListComponent implements OnInit {
       path: result.path.map( v => temp[v]['place'])
     };
     console.log(this.result);
+  }
+  createJournal() {
+    const journal = this.journal.tempJournal(this.result.path);
+    this.router.navigate([`/journal/${journal.id}`]);
   }
 }

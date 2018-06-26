@@ -1,0 +1,11 @@
+:host {
+  display: flex;
+  justify-content: center;
+}
+.label {
+  cursor: pointer;
+  padding-bottom: 5px;
+}
+.label:hover {
+  background: rgba(0, 0, 0, 0.03);
+}

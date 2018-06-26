@@ -1,8 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
-import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
-import {GeocoderService} from '../service/geocoder.service';
-import {NavermapsService, NaverPlace} from '../service/navermaps.service';
+import { Component, OnInit } from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
@@ -10,12 +6,12 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
   animations: [
-    trigger('isShrink', [
+    trigger('isOpen', [
       state('true', style({
-        marginLeft: '255px'
+        width: '250px'
       })),
       state('false', style({
-        marginLeft: '5px'
+        width: '0px'
       })),
       transition('* => true', animate('500ms ease-in')),
       transition('* => false', animate('500ms ease-in'))
@@ -23,46 +19,16 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
   ]
 })
 export class MainComponent implements OnInit {
-  @Input() isShrink: boolean;
-  @Output() openNav = new EventEmitter();
-  searchForm: FormGroup;
-  textCtrl: FormControl;
-  retrievedPlaces: any[];
   isShow = false;
-  constructor(
-    private fb: FormBuilder,
-    private naverService: NavermapsService,
-    private geocoder: GeocoderService) {
-    this.textCtrl = fb.control('');
-    this.searchForm = fb.group({
-      text: this.textCtrl
-    });
-
-    this.textCtrl.valueChanges.pipe(
-      debounceTime(200),
-      distinctUntilChanged()
-    ).subscribe(val => {
-      if (val) {
-        this.geocoder.search(val).subscribe(
-          places => {
-            console.log(places);
-            this.retrievedPlaces = places.items;
-          }
-        );
-      } else {
-        this.retrievedPlaces = [];
-      }
-    });
-  }
-
+  constructor() {}
   ngOnInit() {
   }
-  clickMenu(event) {
-    event.stopPropagation();
-    this.openNav.emit(true);
+  openNav() {
+    this.isShow = !this.isShow;
   }
-  clickPlace(place: NaverPlace) {
-    this.naverService.drawMarker(place);
-    this.isShow = false;
+  onClick(event) {
+    if (this.isShow === true) {
+      this.openNav();
+    }
   }
 }

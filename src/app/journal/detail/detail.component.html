@@ -1,0 +1,37 @@
+<div class="header">
+  <div><button mat-icon-button (click)="back()"><mat-icon>navigate_before</mat-icon></button></div>
+  <div class="header-name">나의 여행일지</div>
+  <div><button mat-button (click)="save()">저장</button></div>
+</div>
+<div class="detail">
+  <div class="title">
+    <app-editable-content [text]="journal.title" [align]="'center'" [placeholder]="'여행의 제목을 지어주세요.'" (changes)="journal.title = $event"></app-editable-content>
+  </div>
+  <div class="travel">
+    <div class="place" *ngFor="let place of getList(); index as i">
+      <div class="place-decorator">
+        <div class="background">
+          <div></div>
+          <div class="middle"></div>
+          <div></div>
+        </div>
+        <div class="seq"><span>{{i + 1}}</span></div>
+        <div class="background">
+          <div></div>
+          <div class="middle"></div>
+          <div></div>
+        </div>
+      </div>
+      <div class="place-header">
+        <app-embedded-map [place]="place"></app-embedded-map>
+      </div>
+      <div class="place-content">
+        <!--<div clas="dates">
+          <span>일정 : <input type="datetime-local" [ngModel]="place.fromDate" (change)="change($event)"> ~
+          <input type="datetime-local" [ngModel]="place.toDate"></span>
+        </div>-->
+        <app-editable-content [text]="place.journal" [multi]="true" [placeholder]="'여기에 이 장소에 대한 이야기를 적어주세요.'" (changes)="place.journal = $event"></app-editable-content>
+      </div>
+    </div>
+  </div>
+</div>

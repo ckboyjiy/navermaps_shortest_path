@@ -1,0 +1,12 @@
+<div class="title">
+  <button mat-icon-button routerLink="/"><mat-icon>navigate_before</mat-icon></button>
+  <div>나의 여행일지</div>
+</div>
+<div class="list">
+  <div class="travel" *ngFor="let journal of journals" (click)="go(journal.id)">
+    <div class="travel-title">{{journal.title}}</div>
+    <div class="travel-date">-</div>
+    <div class="travel-places">{{getPath(journal) | stripTag}}</div>
+  </div>
+</div>
+<button mat-fab class="add-travel" routerLink="/journal/detail"><mat-icon>note_add</mat-icon></button>

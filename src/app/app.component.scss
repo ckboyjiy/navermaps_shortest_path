@@ -1,29 +1,2 @@
 :host {
-  display: block;
-  min-height: 100vh;
-  margin: 0px;
-  padding: 0px;
-}
-.side-nav {
-  height: 100%;
-  width: 0px;
-  position: fixed;
-  z-index: 1;
-  top: 0px;
-  left: 0px;
-  background: #FFF;
-  overflow-x: hidden;
-  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
-}
-.main {
-  height: 100vh;
-  padding: 0px;
-  margin: 0px;
-}
-
-app-main {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  right: 0px;
 }

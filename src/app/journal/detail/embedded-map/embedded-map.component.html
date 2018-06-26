@@ -1,0 +1,7 @@
+<div class="info">
+  <div class="title">{{place.title | stripTag}}</div>
+  <div class="cate">{{place.category}}</div>
+  <div class="attr">주소 : {{place.mapInfo.address}}</div>
+  <div class="description" [innerHtml]="place.description | stripTag"></div>
+</div>
+<div class="maps" #maps></div>

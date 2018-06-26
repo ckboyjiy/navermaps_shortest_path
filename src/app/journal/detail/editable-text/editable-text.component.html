@@ -1,0 +1,3 @@
+<div class="label" *ngIf="!isEdit" #label (click)="clickLabel()" [innerHtml]="text ? text : placeholder"></div>
+<input *ngIf="isEdit && !multi" type="text" [ngStyle]="styles" [value]="text" (blur)="blurText(inputText.value)" #inputText>
+<textarea *ngIf="isEdit && multi" [ngStyle]="styles" (blur)="blurText(textarea.value)" (keyup)="keyup($event)" #textarea>{{getTextarea()}}</textarea>

@@ -1,0 +1,47 @@
+:host {
+  margin: 0px;
+  padding: 0px;
+}
+* {
+  color: rgba(0, 0, 0, 0.75)
+}
+.title {
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.6);
+}
+.list {
+  margin: 1px 0px 5px 0px;
+  .travel {
+    cursor: pointer;
+    padding: 8px 5px 8px 15px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-wrap: wrap;
+    .travel-title {
+      padding-bottom: 3px;
+      width: 100%;
+    }
+    .travel-date {
+      width: 100px;
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.5);
+    }
+    .travel-places {
+      flex: 1 1 auto;
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.7);
+    }
+  }
+  .travel:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+}
+.add-travel {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  background: #64d269;
+  mat-icon { color: #FFF; }
+}

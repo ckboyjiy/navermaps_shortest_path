@@ -58,7 +58,7 @@ export class TopComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.triggerCompositionEnd();
+    // this.triggerCompositionEnd();
   }
   clickMenu(event) {
     event.stopPropagation();

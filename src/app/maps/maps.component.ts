@@ -43,13 +43,10 @@ export class MapsComponent implements OnInit {
   geoMarker: naver.maps.Marker;
   departMarker: naver.maps.Marker;
   shortestPath;
-  snackBar;
   constructor(
       private naverService: NavermapsService, private viewContainerRef: ViewContainerRef, private geocoder: GeocoderService,
-      private componentFactoryResolver: ComponentFactoryResolver, private tsp: TspService, private overlayFactory: OverlayFactoryService,
-      private ref: ElementRef) {
+      private componentFactoryResolver: ComponentFactoryResolver, private tsp: TspService, private overlayFactory: OverlayFactoryService) {
     this.initInfoWindow();
-    this.eventSubscribe();
   }
   eventSubscribe() {
     this.naverService.observable.subscribe((event: NavermapsEvent) => {
@@ -67,6 +64,7 @@ export class MapsComponent implements OnInit {
   ngOnInit() {
     this.initMap();
     this.initInstanceMarker();
+    this.eventSubscribe();
   }
   resize(event) {
     const width = window.getComputedStyle(this.mapsDiv.nativeElement, null).getPropertyValue('width');

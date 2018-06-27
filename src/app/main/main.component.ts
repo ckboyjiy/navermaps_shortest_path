@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, HostBinding, OnInit} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import {routerAnimation} from '../animations/routerAnimation';
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
   animations: [
+      routerAnimation,
     trigger('isOpen', [
       state('true', style({
         width: '250px'
@@ -19,6 +21,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
   ]
 })
 export class MainComponent implements OnInit {
+  @HostBinding('@routeAnimation') routeAnimation = true;
   isShow = false;
   constructor() {}
   ngOnInit() {

@@ -1,15 +1,18 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostBinding, OnInit} from '@angular/core';
 import { Location } from '@angular/common';
 import {Journal, JournalService} from '../../service/journal.service';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {routerAnimation} from '../../animations/routerAnimation';
 
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',
-  styleUrls: ['./detail.component.scss']
+  styleUrls: ['./detail.component.scss'],
+  animations: [routerAnimation]
 })
 export class DetailComponent implements OnInit {
 
+  @HostBinding('@routeAnimation') routeAnimation = true;
   _id: string;
   set id(id: string) {
     this._id = id;

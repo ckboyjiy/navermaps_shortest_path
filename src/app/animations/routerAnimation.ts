@@ -4,8 +4,7 @@ export const routerAnimation = trigger('routeAnimation', [
   state('*',
       style({
         opacity: 1,
-        position: 'absolute',
-        transform: 'translateX(0)'
+        position: 'absolute'
       })
   ),
   transition(':enter', [
@@ -14,13 +13,13 @@ export const routerAnimation = trigger('routeAnimation', [
       position: 'absolute',
       transform: 'translateX(100%)'
     }),
-    animate('0.3s ease-in')
+    animate('0.2s ease-in')
   ]),
   transition(':leave', [
-    animate('0.3s ease-out', style({
+    animate('0.2s ease-out', style({
       opacity: 0,
       position: 'absolute',
       transform: 'translateX(-100%)'
     }))
   ])
-])
+]);

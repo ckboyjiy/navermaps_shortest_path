@@ -1,11 +1,12 @@
 :host {
   width: 100%;
+  display: block;
 }
 * {
   color: rgba(0, 0, 0, 0.75);
 }
 .header {
-  position: fixed;
+  position: sticky;
   top: 0px;
   right: 0px;
   left: 0px;
@@ -21,7 +22,6 @@
   .header-name { flex: 1 1 auto;}
 }
 .detail {
-  margin-top: 60px;
   display: flex;
   flex-direction: column;
   .title {
@@ -70,7 +70,7 @@
       }
       .place-header, .place-content {
         width: 80%;
-        min-width: 390px;
+        min-width: 360px;
         padding: 2px;
       }
     }

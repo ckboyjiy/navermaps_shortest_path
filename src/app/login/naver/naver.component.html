@@ -1,0 +1,6 @@
+<!--<img class="login-btn" *ngIf="!isLogin" src="/assets/naver-login.png" (click)="login()">
+<img class="login-btn" *ngIf="isLogin" src="/assets/naver-logout.png" (click)="logout()">-->
+<div class="naver" (click)="click()" [ngClass]="{'login': !isLogin}">
+  <img [ngClass]="{'icon_login': !isLogin, 'icon_logout': isLogin}" [src]="isLogin ? '/assets/naver_white.png' : '/assets/naver_green.png'">
+  <div [ngClass]="{'text_login': !isLogin, 'text_logout': isLogin}">{{isLogin ? '로그아웃' : '네이버 아이디로 로그인'}}</div>
+</div>

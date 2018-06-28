@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, HostBinding, OnInit} from '@angular/core';
 import {NavermapsEvent, NavermapsService} from '../../service/navermaps.service';
 import { filter } from 'rxjs/operators';
 import {MarkerType} from '../../service/overlay-factory.service';
@@ -15,7 +15,7 @@ export class PinnedListComponent implements OnInit {
   depart: naver.maps.Marker;
   pinnedList: naver.maps.Marker[];
   result: any;
-  constructor(private naverService: NavermapsService, private journal: JournalService, private router: Router) {
+  constructor(private naverService: NavermapsService, private journal: JournalService, private router: Router, private el: ElementRef) {
     this.depart = null;
     this.pinnedList = [];
   }
@@ -58,7 +58,9 @@ export class PinnedListComponent implements OnInit {
       distance: result.distance,
       path: result.path.map( v => temp[v]['place'])
     };
-    console.log(this.result);
+    requestAnimationFrame(() => {
+      this.el.nativeElement.scrollTop = this.el.nativeElement.scrollHeight;
+    });
   }
   createJournal() {
     const journal = this.journal.tempJournal(this.result.path);

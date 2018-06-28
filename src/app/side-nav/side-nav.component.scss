@@ -12,6 +12,20 @@
   opacity: 0.7;
 }
 
-.pinned-list {
-
+.more {
+  box-shadow: 0px -1px 5px rgba(0, 0, 0, 0.2);
+  padding-top: 10px;
+  flex: none;
+  .journal-list {
+    cursor: pointer;
+    padding: 5px;
+    margin-bottom: 5px;
+    transition: 0.2s;
+  }
+  .journal-list:hover {
+    background: rgba(0, 0, 0, 0.1);
+  }
+  app-naver {
+    padding: 4px;
+  }
 }

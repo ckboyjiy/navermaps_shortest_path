@@ -1,0 +1,35 @@
+:host {
+  width: 100%;
+  display:block;
+  position: absolute;
+}
+.header {
+  min-height: 40px;
+  position: sticky;
+  top: 0px;
+  right: 0px;
+  left: 0px;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.6);
+}
+.contents {
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .login {
+    min-width: 320px;
+    padding: 50px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .info {
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+  }
+}

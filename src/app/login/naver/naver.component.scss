@@ -1,0 +1,37 @@
+:host {
+  display:block;
+}
+.naver {
+  display: flex;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  max-height: 40px;
+  transition: 0.2s ease-in;
+  img {
+    border-radius: 5px 0px 0px 5px;
+    flex: none;
+  }
+  .icon_login {
+    border-right: 1px solid #0FA700;
+  }
+  .icon_logout {
+    border-right: 1px solid #ddd;
+  }
+  div {
+    padding-left: 8px;
+    padding-right: 8px;
+    align-self: center;
+    flex: 1 1 auto;
+  }
+  .text_login {
+    color: #FFF;
+  }
+  .text_logout {
+    color: #999;
+  }
+}
+.login {
+  background: #1EC800;
+  border-color: #0FA700;
+}

@@ -21,6 +21,9 @@ import {RoutingModule} from './routing/routing.module';
 import { DetailComponent } from './journal/detail/detail.component';
 import { EditableTextComponent } from './journal/detail/editable-text/editable-text.component';
 import { EmbeddedMapComponent } from './journal/detail/embedded-map/embedded-map.component';
+import { CallbackComponent } from './login/naver/callback/callback.component';
+import { NaverComponent } from './login/naver/naver.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +41,10 @@ import { EmbeddedMapComponent } from './journal/detail/embedded-map/embedded-map
     JournalComponent,
     DetailComponent,
     EditableTextComponent,
-    EmbeddedMapComponent
+    EmbeddedMapComponent,
+    CallbackComponent,
+    NaverComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule, HttpClientModule, HttpClientJsonpModule, FormsModule, ReactiveFormsModule,

@@ -15,10 +15,14 @@ export class JournalComponent implements OnInit {
 
   @HostBinding('@routeAnimation') routeAnimation = true;
   journals: Journal[];
-  constructor(private journalService: JournalService, private router: Router) { }
+  constructor(private journalService: JournalService, private router: Router) {
+    this.journalService.getAllJournal().subscribe(v => {
+      this.journals = v;
+    });
+  }
 
   ngOnInit() {
-    this.journals = this.journalService.getAllJournal();
+    // this.journals = this.journalService.getAllJournal();
   }
   getPath(journal: Journal) {
     return journal.contents.filter((v, i, a) => i > 0 && i < a.length - 1).map(v => v.title).join(' -> ');

@@ -8,9 +8,6 @@ import {Component, OnInit} from '@angular/core';
 export class CallbackComponent implements OnInit {
 
   ngOnInit() {
-  }
-
-  complete() {
     const params = {};
     const hash = location.hash.substring(1);
     const regex = /([^#?&=]+)=([^&]*)/g;
@@ -21,6 +18,9 @@ export class CallbackComponent implements OnInit {
     window.opener.dispatchEvent(new CustomEvent('auth_complete', {
       detail: params
     }));
+  }
+
+  complete() {
     window.close();
   }
 }

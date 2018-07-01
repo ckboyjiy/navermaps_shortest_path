@@ -24,7 +24,10 @@ export class NavermapsService {
       subscriber.next({
         type: 'marker',
         event: 'init',
-        data: this._travelList
+        data: {
+          depart: this._depart,
+          travelList: this._travelList
+        }
       });
       this._subject.subscribe(value => subscriber.next(value), error => subscriber.error(error), () => subscriber.complete());
       return {unsubscribe() {console.log('unsubscribe'); } };
@@ -156,6 +159,14 @@ export class NavermapsService {
       event: 'move',
       data: marker['place'].mapInfo.point
     });
+  }
+  removeAllMarker() {
+    [].concat(this._travelList).reverse().forEach(marker => {
+      this.removeMarker(marker);
+    });
+    if (this._depart) {
+      this.removeMarker(this._depart);
+    }
   }
 }
 

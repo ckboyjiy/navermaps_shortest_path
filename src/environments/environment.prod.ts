@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://dongsunny-stg.herokuapp.com',
-  clientId: '89SRO7SPbW3F8qc7dnnS'
+  apiUrl: `https://${location.host}`,
+  clientId: 'z92hdqGiAnUbPwJXV6bd',
+  clientIdStg: 'xx8p4HHvezPUK_EkXLIW',
 };

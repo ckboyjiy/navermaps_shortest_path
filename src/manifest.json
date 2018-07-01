@@ -1,0 +1,7 @@
+{
+  "name": "Dongsuuny-mini",
+  "short_name": "dm",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#FFF"
+}

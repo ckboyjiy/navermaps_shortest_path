@@ -1,23 +1,33 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private _redirect_uri = 'http://localhost:4200/login/naver/callback';
-  private _authorize_uri = 'https://nid.naver.com/oauth2.0/authorize';
-  private _profile_uri = 'https://openapi.naver.com/v1/nid/getUserProfile.json';
-  constructor(private http: HttpClient) { }
+  _redirect_uri: string;
+  _authorize_uri = 'https://nid.naver.com/oauth2.0/authorize';
+  _profile_uri = 'https://openapi.naver.com/v1/nid/getUserProfile.json';
+  get userId() {
+    return JSON.parse(sessionStorage.getItem('user')).email;
+  }
+  constructor(private http: HttpClient) {
+    if (location.hostname === 'localhost') {
+      this._redirect_uri = 'http://';
+    } else {
+      this._redirect_uri = 'https://';
+    }
+    this._redirect_uri += location.host + '/login/naver/callback';
+  }
   /**
    * access_token을 얻기위한 url을 생성한다.
    * @returns {string}
    */
   getAuthorizeUrl(state: string) {
-    const cid = environment.clientId;
+    const cid = location.host.indexOf('-stg') === -1 ? environment.clientId : environment.clientIdStg;
     const type = 'token';
     return `${this._authorize_uri}?response_type=${type}&client_id=${cid}&redirect_uri=${this._redirect_uri}&state=${state}`;
   }
@@ -59,27 +69,15 @@ export class AuthService {
    * @returns {Observable<boolean>}
    */
   isLogin(): Observable<boolean> {
-    return Observable.create(subscriber => {
-      // 유저정보가 있는가?
-      const user = sessionStorage.getItem('user');
-      if (!sessionStorage.getItem('user')) {
-        // 없다면
-        const token = localStorage.getItem('token');
-        // 토큰은 존재하는가?
-        if (token) {
-          // 있다면
-          this.setProfile(token).subscribe(v => {
-            subscriber.next(v);
-          });
-        } else {
-          // 없다면 인증정보 없음
-          subscriber.next(false);
-        }
-      } else {
-        subscriber.next(true);
-      }
-      subscriber.complete();
-    });
+    const user = sessionStorage.getItem('user');
+    const token = localStorage.getItem('token');
+    if (user) {
+      return of(true);
+    } else if (!user && !token) {
+      return of(false);
+    } else {
+      return this.setProfile(token);
+    }
   }
   getProfile() {
     return JSON.parse(sessionStorage.getItem('user'));

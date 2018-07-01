@@ -14,7 +14,7 @@ export class NaverComponent implements OnInit {
   redirectUrl: string;
   isLogin: boolean;
   constructor(private authService: AuthService, private route: ActivatedRoute, private router: Router) {
-    this.redirectUrl = this.route.snapshot.paramMap.get('redirect') ? this.route.snapshot.paramMap.get('redirect') : '/';
+    this.redirectUrl = this.route.snapshot.paramMap.get('redirect') ? this.route.snapshot.paramMap.get('redirect') : '/'
     this.authService.isLogin().subscribe(result => {
       this.isLogin = result;
     });
@@ -25,7 +25,7 @@ export class NaverComponent implements OnInit {
 
   login() {
     this.state = encodeURIComponent(shortid.generate());
-    const options = 'titlebar=1, resizable=1, scrollbars=yes, width=600, height=550';
+    const options = 'titlebar=1, resizable=1, scrollbars=yes, width=450, height=200';
     window.open(this.authService.getAuthorizeUrl(this.state), 'naverloginpop', options);
     const trigger = e => {
       if (e.detail.state === this.state) {
@@ -37,7 +37,7 @@ export class NaverComponent implements OnInit {
         });
       }
       window.removeEventListener('auth_complete', trigger);
-    }
+    };
     window.addEventListener('auth_complete', trigger);
   }
   logout() {

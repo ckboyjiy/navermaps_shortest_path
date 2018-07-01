@@ -53,6 +53,7 @@ export class MapsComponent implements OnInit {
       if (event.type === 'map' && event.event === 'move')         { this.moveCenter(event.data); }
       if (event.type === 'map' && event.event === 'geolocation')  { this.setGeolocation(event.data); }
       if (event.type === 'map' && event.event === 'zoom')         { this.maps.setZoom(event.data); }
+      if (event.type === 'marker' && event.event === 'init')      { this.initMarkers(event.data); }
       if (event.type === 'marker' && event.event === 'draw')      { this.setInstanceMarker(event.data); }
       if (event.type === 'marker' && event.event === 'addTravel') { this.addTravelMarker(event.data); }
       if (event.type === 'marker' && event.event === 'remove')    { this.removeMarker(event.data); }
@@ -87,6 +88,16 @@ export class MapsComponent implements OnInit {
       this.naverService.changedZoom(event);
     });
     this.naverService.initMaps(this.maps.getZoom());
+  }
+  initMarkers(data) {
+    if (data.depart) {
+      this.setDepart(data.depart);
+    }
+    if (data.travelList) {
+      data.travelList.forEach(marker => {
+        this.addTravelMarker(marker);
+      });
+    }
   }
   setDepart(marker: naver.maps.Marker) {
     this.closeInfo();
@@ -123,7 +134,6 @@ export class MapsComponent implements OnInit {
     this.geoMarker.setMap(null);
   }
   setGeolocation(data) {
-    console.log(data);
     if (data) {
       if (data.isFirst) {
         this.maps.setCenter(data);
@@ -145,7 +155,6 @@ export class MapsComponent implements OnInit {
     this._addMarkerEvent(this.instanceMarker);
   }
   moveCenter(point: naver.maps.PointObjectLiteral) {
-    console.log(this.maps.getSize());
     this.maps.panTo(point, {});
   }
 

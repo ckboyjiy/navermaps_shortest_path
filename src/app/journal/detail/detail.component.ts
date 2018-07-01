@@ -16,7 +16,7 @@ export class DetailComponent implements OnInit {
   _id: string;
   set id(id: string) {
     this._id = id;
-    this.journal = this.journalService.getJournal(id);
+    this.journalService.getJournal(id).subscribe(journal => this.journal = journal);
   }
   title: string;
   journal: Journal;
@@ -31,7 +31,7 @@ export class DetailComponent implements OnInit {
     return this.journal.contents.filter( (v, i, a) => i > 0 && i < a.length - 1);
   }
   save() {
-    this.journal.date = new Date(Date.now());
+    this.journal.date = Date.now();
     this.journalService.saveJournal(this.journal);
     this.router.navigate(['/journal']);
   }

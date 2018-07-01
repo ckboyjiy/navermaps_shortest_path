@@ -24,12 +24,20 @@ export class PinnedListComponent implements OnInit {
     this.naverService.observable.pipe(
       filter((val: NavermapsEvent) => val.type === 'marker' || val.type === 'polyline')
     ).subscribe(val => {
-      if (val.type === 'marker' && val.event === 'init')      { this.pinnedList = [...val.data]; }
+      if (val.type === 'marker' && val.event === 'init')      { this.init(val.data); }
       if (val.type === 'marker' && val.event === 'addTravel') { this.pinnedList.push(val.data); }
       if (val.type === 'marker' && val.event === 'setDepart') { this.depart = val.data; }
       if (val.type === 'marker' && val.event === 'remove')    { this._remove(val.data); }
       if (val.type === 'polyline' && val.event === 'shortestPath') { this._resultShortestPath(val.data); }
     });
+  }
+  init(data: any) {
+    if (data.travelList) {
+      this.pinnedList = [...data.travelList];
+    }
+    if (data.depart) {
+      this.depart = data.depart;
+    }
   }
   removePinnedMarker(marker: naver.maps.Marker) {
     this.naverService.removeMarker(marker);
@@ -63,7 +71,8 @@ export class PinnedListComponent implements OnInit {
     });
   }
   createJournal() {
-    const journal = this.journal.tempJournal(this.result.path);
+    this.journal.tempJournal(this.result.path);
+    this.naverService.removeAllMarker();
     this.router.navigate([`/journal/new`]);
   }
 }

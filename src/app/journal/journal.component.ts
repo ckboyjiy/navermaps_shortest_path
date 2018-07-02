@@ -16,6 +16,7 @@ export class JournalComponent implements OnInit {
   @HostBinding('@routeAnimation') routeAnimation = true;
   journals: Journal[];
   constructor(private journalService: JournalService, private router: Router) {
+    this.journals = [];
     this.journalService.getAllJournal().subscribe(v => {
       this.journals = v;
     });

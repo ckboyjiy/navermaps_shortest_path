@@ -108,6 +108,9 @@ export class NavermapsService {
     if (index > -1) {
       this._travelList.splice(index, 1);
     }
+    if (this._depart === marker) {
+      this._depart = null;
+    }
     this._subject.next({
       type: 'marker',
       event: 'remove',
